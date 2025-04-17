@@ -1,25 +1,25 @@
+import { useRef } from "react";
 import { useState } from "react";
 
-export default function Player({ initialName, symbol, ltr = true }) {
-    const [playerName, setPlayerName] = useState(initialName);
+export default function Player({ name, onUpdateName, symbol, rtl }) {
     const [isEditing, setIsEditing] = useState(false);
+    const inputRef = useRef();
 
     function handleEditClick() {
+        if (isEditing) {
+            onUpdateName(symbol, inputRef.current.value);
+        }
         setIsEditing((editingState) => !editingState);
     }
 
-    function handleChange(event) {
-        setPlayerName(event.target.value);
-    }
-
-    let editablePlayerName = <span className="player-name">{playerName}</span>;
+    let editablePlayerName = <span className="player-name">{name}</span>;
     if (isEditing) {
         editablePlayerName = (
             <input
+                ref={inputRef}
                 type="text"
+                defaultValue={name}
                 required
-                value={playerName}
-                onChange={handleChange}
                 maxLength={16}
             />
         );
@@ -32,14 +32,14 @@ export default function Player({ initialName, symbol, ltr = true }) {
 
     return (
         <li>
-            {ltr ? (
+            {rtl ? (
                 <span className="player">
                     {editButton}
                     {editablePlayerName}
                     {playerSymbol}
                 </span>
             ) : (
-                <span span className="player">
+                <span className="player">
                     {playerSymbol}
                     {editablePlayerName}
                     {editButton}
