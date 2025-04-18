@@ -38,16 +38,18 @@ function App() {
     return (
         <main>
             <div id="game-container">
-                <ol id="players">
+                <ol id="players" className="highlight-player">
                     <Player
                         name={playerNames[SYMBOL_1]}
                         onUpdateName={handleUpdateName}
                         symbol="X"
+                        isActive={activePlayerSymbol === SYMBOL_1}
                     />
                     <Player
                         name={playerNames[SYMBOL_2]}
                         onUpdateName={handleUpdateName}
                         symbol="O"
+                        isActive={activePlayerSymbol === SYMBOL_2}
                         rtl={true}
                     />
                 </ol>

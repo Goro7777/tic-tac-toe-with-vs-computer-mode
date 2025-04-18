@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useState } from "react";
 
-export default function Player({ name, onUpdateName, symbol, rtl }) {
+export default function Player({ name, onUpdateName, symbol, rtl, isActive }) {
     const [isEditing, setIsEditing] = useState(false);
     const inputRef = useRef();
 
@@ -31,7 +31,7 @@ export default function Player({ name, onUpdateName, symbol, rtl }) {
     let playerSymbol = <span className="player-symbol">{symbol}</span>;
 
     return (
-        <li>
+        <li className={isActive ? "active" : null}>
             {rtl ? (
                 <span className="player">
                     {editButton}
