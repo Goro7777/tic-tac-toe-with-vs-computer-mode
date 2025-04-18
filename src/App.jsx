@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Player from "./components/Player";
+import GameBoard from "./components/GameBoard";
 
 const SYMBOL_1 = "X";
 const SYMBOL_2 = "O";
@@ -9,6 +10,13 @@ function App() {
         [SYMBOL_1]: "Player 1",
         [SYMBOL_2]: "Player 2",
     });
+    const [moves, setMoves] = useState([
+        { row: 0, col: 0, symbol: "X" },
+        { row: 1, col: 1, symbol: "O" },
+        { row: 0, col: 1, symbol: "X" },
+        { row: 0, col: 2, symbol: "O" },
+    ]);
+    const [activePlayerSymbol, setActivePlayerSymbol] = useState(SYMBOL_1);
 
     function handleUpdateName(symbol, newName) {
         setPlayerNames((names) => ({
@@ -17,7 +25,15 @@ function App() {
         }));
     }
 
-    console.log(`${playerNames[SYMBOL_1]} vs ${playerNames[SYMBOL_2]}`);
+    function handleSelectEmptySquare(row, col) {
+        setMoves((prevMoves) => [
+            ...prevMoves,
+            { row, col, symbol: activePlayerSymbol },
+        ]);
+        setActivePlayerSymbol((prevSymbol) =>
+            prevSymbol === SYMBOL_1 ? SYMBOL_2 : SYMBOL_1
+        );
+    }
 
     return (
         <main>
@@ -35,7 +51,10 @@ function App() {
                         rtl={true}
                     />
                 </ol>
-                GOAME BOARD
+                <GameBoard
+                    moves={moves}
+                    onSelectEmptySquare={handleSelectEmptySquare}
+                />
             </div>
         </main>
     );
