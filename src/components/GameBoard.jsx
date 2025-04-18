@@ -5,6 +5,14 @@ export default function GameBoard({ moves, onSelectEmptySquare }) {
         }
     }
 
+    return (
+        <ol id="game-board">
+            <GameBoardRows moves={moves} onSelectSquare={handleSelectSquare} />
+        </ol>
+    );
+}
+
+function GameBoardRows({ moves, onSelectSquare }) {
     const rows = [];
     for (let rowIndex = 0; rowIndex < 3; rowIndex++) {
         let row = [];
@@ -16,7 +24,7 @@ export default function GameBoard({ moves, onSelectEmptySquare }) {
                 <li key={colIndex}>
                     <button
                         onClick={() =>
-                            handleSelectSquare(rowIndex, colIndex, !playedCell)
+                            onSelectSquare(rowIndex, colIndex, !playedCell)
                         }
                     >
                         {playedCell?.symbol}
@@ -31,5 +39,5 @@ export default function GameBoard({ moves, onSelectEmptySquare }) {
         );
     }
 
-    return <ol id="game-board">{rows}</ol>;
+    return <>{rows}</>;
 }
