@@ -1,7 +1,7 @@
 import { useState } from "react";
+import { getWinner } from "./winner.js";
 import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
-import { getWinner } from "./winner.js";
 import GameOver from "./components/GameOver.jsx";
 
 const SYMBOL_1 = "X";
@@ -20,14 +20,16 @@ function App() {
     ]);
     const activePlayerSymbol = getActivePlayerSymbol(moves, SYMBOL_1, SYMBOL_2);
     const winningMoves = getWinner(moves);
-    const winner = winningMoves.length > 0 ? winningMoves[0][0].symbol : null;
+    const winnerName =
+        winningMoves.length > 0 ? playerNames[winningMoves[0][0].symbol] : null;
     const gameDrawn = moves.length === 9 && winningMoves === null;
 
     function handleUpdateName(symbol, newName) {
-        setPlayerNames((names) => ({
-            ...names,
-            [symbol]: newName,
-        }));
+        if (newName)
+            setPlayerNames((names) => ({
+                ...names,
+                [symbol]: newName,
+            }));
     }
 
     function handleSelectEmptySquare(row, col) {
@@ -63,9 +65,9 @@ function App() {
                         rtl={true}
                     />
                 </ol>
-                {(winner || gameDrawn) && (
+                {(winnerName || gameDrawn) && (
                     <GameOver
-                        winner={winner}
+                        winnerName={winnerName}
                         onRestart={() => handleResetTo(0)}
                     />
                 )}

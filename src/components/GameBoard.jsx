@@ -5,16 +5,15 @@ const INITIAL_GAME_BOARD = [
 ];
 
 export default function GameBoard({ moves, onSelectEmptySquare }) {
+    let gameBoard = [...INITIAL_GAME_BOARD.map((array) => [...array])];
+    for (let move of moves) {
+        gameBoard[move.row][move.col] = move.symbol;
+    }
+
     function handleSelectSquare(row, col, symbol) {
         if (!symbol) {
             onSelectEmptySquare(row, col);
         }
-    }
-
-    let gameBoard = [...INITIAL_GAME_BOARD.map((array) => [...array])];
-
-    for (let move of moves) {
-        gameBoard[move.row][move.col] = move.symbol;
     }
 
     return (
