@@ -1,4 +1,4 @@
-const initialGameBoard = [
+const INITIAL_GAME_BOARD = [
     [null, null, null],
     [null, null, null],
     [null, null, null],
@@ -11,7 +11,8 @@ export default function GameBoard({ moves, onSelectEmptySquare }) {
         }
     }
 
-    let gameBoard = initialGameBoard;
+    let gameBoard = [...INITIAL_GAME_BOARD.map((array) => [...array])];
+
     for (let move of moves) {
         gameBoard[move.row][move.col] = move.symbol;
     }

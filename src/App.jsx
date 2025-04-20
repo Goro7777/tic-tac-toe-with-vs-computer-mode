@@ -41,6 +41,10 @@ function App() {
         });
     }
 
+    function handleResetTo(move) {
+        setMoves((prevMoves) => prevMoves.slice(0, move));
+    }
+
     return (
         <main>
             <div id="game-container">
@@ -59,7 +63,12 @@ function App() {
                         rtl={true}
                     />
                 </ol>
-                {(winner || gameDrawn) && <GameOver winner={winner} />}
+                {(winner || gameDrawn) && (
+                    <GameOver
+                        winner={winner}
+                        onRestart={() => handleResetTo(0)}
+                    />
+                )}
                 <GameBoard
                     moves={moves}
                     onSelectEmptySquare={handleSelectEmptySquare}
