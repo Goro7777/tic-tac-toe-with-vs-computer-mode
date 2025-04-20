@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
+import { getWinner } from "./winner.js";
 
 const SYMBOL_1 = "X";
 const SYMBOL_2 = "O";
@@ -17,6 +18,8 @@ function App() {
         { row: 0, col: 2, symbol: "O" },
     ]);
     const activePlayerSymbol = getActivePlayerSymbol(moves, SYMBOL_1, SYMBOL_2);
+    const winningMoves = getWinner(moves);
+    if (winningMoves.length) console.log(winningMoves);
 
     function handleUpdateName(symbol, newName) {
         setPlayerNames((names) => ({
