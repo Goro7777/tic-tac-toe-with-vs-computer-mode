@@ -26,10 +26,15 @@ function App() {
     }
 
     function handleSelectEmptySquare(row, col) {
-        setMoves((prevMoves) => [
-            ...prevMoves,
-            { row, col, symbol: activePlayerSymbol },
-        ]);
+        setMoves((prevMoves) => {
+            let currentPlayerSymbol = SYMBOL_1;
+            if (
+                prevMoves.length &&
+                prevMoves[prevMoves.length - 1].symbol === SYMBOL_1
+            )
+                currentPlayerSymbol = SYMBOL_2;
+            return [...prevMoves, { row, col, symbol: currentPlayerSymbol }];
+        });
         setActivePlayerSymbol((prevSymbol) =>
             prevSymbol === SYMBOL_1 ? SYMBOL_2 : SYMBOL_1
         );
