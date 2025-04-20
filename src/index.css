@@ -228,38 +228,51 @@ ol {
     border: 2px solid #fcd256;
     color: #fcd256;
     padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s, color 0.2s;
-    box-shadow: 0 0 8px rgba(255, 187, 0, 0.4);
-}
-
-#game-over button:hover {
-    background: #fcd256;
-    color: #3f3b00;
-    transform: scale(1.1);
-    box-shadow: 0 0 20px rgba(255, 187, 0, 0.8);
 }
 
 #log {
     max-width: 20rem;
     color: #3f3b00;
-    list-style: none;
+    list-style: reset;
     margin: 2rem auto;
     padding: 0;
-    text-align: center;
+    text-align: left;
 }
 
 #log li {
+    padding: 0.1rem;
     border-radius: 4px;
     animation: slide-in-from-left 1s cubic-bezier(0.075, 0.82, 0.165, 1)
         forwards;
     margin: 0.75rem;
 }
 
-#log li.highlighted {
-    background-color: #3f3b00;
-    color: white;
+#log > li::marker {
+    font-weight: bold;
+}
+
+#log li button {
+    float: right;
+    background: #3f3b00;
+    border: 1px solid #fcd256;
+    color: #fcd256;
+    padding: 0.3rem 0.5rem;
+}
+
+#log li button,
+#game-over button {
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s, color 0.2s;
+    box-shadow: 0 0 8px rgba(255, 187, 0, 0.4);
+}
+
+#game-over button:hover,
+#log li button:hover {
+    background: #fcd256;
+    color: #3f3b00;
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(255, 187, 0, 0.8);
 }
 
 #game-hints {
