@@ -1,43 +1,44 @@
+const initialGameBoard = [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+];
+
 export default function GameBoard({ moves, onSelectEmptySquare }) {
-    function handleSelectSquare(row, col, isEmpty) {
-        if (isEmpty) {
+    function handleSelectSquare(row, col, symbol) {
+        if (!symbol) {
             onSelectEmptySquare(row, col);
         }
     }
 
-    return (
-        <ol id="game-board">
-            <GameBoardRows moves={moves} onSelectSquare={handleSelectSquare} />
-        </ol>
-    );
-}
-
-function GameBoardRows({ moves, onSelectSquare }) {
-    const rows = [];
-    for (let rowIndex = 0; rowIndex < 3; rowIndex++) {
-        let row = [];
-        for (let colIndex = 0; colIndex < 3; colIndex++) {
-            let playedCell = moves.find(
-                (cell) => cell.row === rowIndex && cell.col === colIndex
-            );
-            row.push(
-                <li key={colIndex}>
-                    <button
-                        onClick={() =>
-                            onSelectSquare(rowIndex, colIndex, !playedCell)
-                        }
-                    >
-                        {playedCell?.symbol}
-                    </button>
-                </li>
-            );
-        }
-        rows.push(
-            <li key={rowIndex}>
-                <ol>{row}</ol>
-            </li>
-        );
+    let gameBoard = initialGameBoard;
+    for (let move of moves) {
+        gameBoard[move.row][move.col] = move.symbol;
     }
 
-    return <>{rows}</>;
+    return (
+        <ol id="game-board">
+            {gameBoard.map((row, rowIndex) => (
+                <li key={rowIndex}>
+                    <ol>
+                        {row.map((symbol, colIndex) => (
+                            <li key={colIndex}>
+                                <button
+                                    onClick={() =>
+                                        handleSelectSquare(
+                                            rowIndex,
+                                            colIndex,
+                                            symbol
+                                        )
+                                    }
+                                >
+                                    {symbol}
+                                </button>
+                            </li>
+                        ))}
+                    </ol>
+                </li>
+            ))}
+        </ol>
+    );
 }
