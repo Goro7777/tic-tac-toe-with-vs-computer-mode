@@ -3,6 +3,7 @@ import { getWinner } from "./winner.js";
 import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
 import GameOver from "./components/GameOver.jsx";
+import Log from "./components/Log.jsx";
 
 const SYMBOL_1 = "X";
 const SYMBOL_2 = "O";
@@ -76,6 +77,7 @@ function App() {
                     onSelectEmptySquare={handleSelectEmptySquare}
                 />
             </div>
+            <Log moves={moves} onResetTo={handleResetTo} />
         </main>
     );
 }
