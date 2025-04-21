@@ -87,12 +87,18 @@ function App() {
                         onUpdateName={handleUpdateName}
                         symbol={SYMBOL_1}
                         isActive={activePlayerSymbol === SYMBOL_1}
+                        computerTypes={
+                            players[SYMBOL_1].isComputer && COMPUTER_TYPES
+                        }
                     />
                     <Player
                         name={players[SYMBOL_2].name}
                         onUpdateName={handleUpdateName}
                         symbol={SYMBOL_2}
                         isActive={activePlayerSymbol === SYMBOL_2}
+                        computerTypes={
+                            players[SYMBOL_2].isComputer && COMPUTER_TYPES
+                        }
                         rtl={true}
                     />
                 </ol>

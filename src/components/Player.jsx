@@ -1,27 +1,45 @@
 import { useRef } from "react";
 import { useState } from "react";
 
-export default function Player({ name, onUpdateName, symbol, rtl, isActive }) {
+export default function Player({
+    name,
+    symbol,
+    rtl,
+    isActive,
+    computerTypes,
+    onUpdateName,
+}) {
     const [isEditing, setIsEditing] = useState(false);
-    const inputRef = useRef();
+    const ref = useRef();
 
     function handleEditClick() {
         if (isEditing) {
-            onUpdateName(symbol, inputRef.current.value);
+            onUpdateName(symbol, ref.current.value);
         }
         setIsEditing((editingState) => !editingState);
     }
 
     let editablePlayerName = <span className="player-name">{name}</span>;
-    if (isEditing) {
+    if (isEditing && !computerTypes) {
         editablePlayerName = (
             <input
-                ref={inputRef}
+                ref={ref}
                 type="text"
                 defaultValue={name}
                 required
                 maxLength={16}
             />
+        );
+    }
+    if (isEditing && computerTypes) {
+        editablePlayerName = (
+            <select ref={ref}>
+                {computerTypes.map((type) => (
+                    <option key={type} value={type}>
+                        {type}
+                    </option>
+                ))}
+            </select>
         );
     }
 
