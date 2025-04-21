@@ -251,12 +251,18 @@ ol {
     font-weight: bold;
 }
 
-#log li button {
-    float: right;
+#log li button,
+#player-type-controller button {
+    /* float: right; */
     background: #3f3b00;
     border: 1px solid #fcd256;
     color: #fcd256;
     padding: 0.3rem 0.5rem;
+}
+
+#log li button,
+#player-type-controller button:last-child {
+    float: right;
 }
 
 #log li button,
@@ -268,7 +274,8 @@ ol {
 }
 
 #game-over button:hover,
-#log li button:hover {
+#log li button:hover,
+#player-type-controller button:hover {
     background: #fcd256;
     color: #3f3b00;
     transform: scale(1.1);

@@ -66,6 +66,10 @@ function App() {
                         rtl={true}
                     />
                 </ol>
+                <div id="player-type-controller">
+                    <button>Switch to computer player</button>
+                    <button>Switch to computer player</button>
+                </div>
                 {(winnerName || gameDrawn) && (
                     <GameOver
                         winnerName={winnerName}
