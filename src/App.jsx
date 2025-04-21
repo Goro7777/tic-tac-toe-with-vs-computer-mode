@@ -23,7 +23,7 @@ function App() {
     const winningMoves = getWinner(moves);
     const winnerName =
         winningMoves.length > 0 ? playerNames[winningMoves[0][0].symbol] : null;
-    const gameDrawn = moves.length === 9 && winningMoves === null;
+    const gameDrawn = moves.length === 9 && winnerName === null;
 
     function handleUpdateName(symbol, newName) {
         if (newName)
