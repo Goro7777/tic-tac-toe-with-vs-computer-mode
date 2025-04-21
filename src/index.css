@@ -266,7 +266,8 @@ ol {
 }
 
 #log li button,
-#game-over button {
+#game-over button,
+#player-type-controller button:hover {
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s, color 0.2s;
