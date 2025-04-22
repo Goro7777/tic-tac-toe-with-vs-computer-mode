@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getWinner } from "./winner.js";
+import { getWinner, weekComputerMove } from "./gameLogic.js";
 import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
 import GameOver from "./components/GameOver.jsx";

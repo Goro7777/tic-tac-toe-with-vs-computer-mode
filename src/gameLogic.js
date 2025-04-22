@@ -5,6 +5,26 @@
 //     { row: 0, col: 2, symbol: "O" },
 // ];
 
+function randomIntegerBetween(min, max) {
+    return min + Math.floor((max - min) * Math.random());
+}
+
+export function weekComputerMove(moves, symbol_1, symbol_2) {
+    let symbol = moves.length % 2 === 0 ? symbol_1 : symbol_2;
+
+    let possibleMoves = [];
+    for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 3; col++) {
+            if (!moves.find((move) => move.row === row && move.col === col)) {
+                possibleMoves.push({ row, col, symbol });
+            }
+        }
+    }
+
+    let index = randomIntegerBetween(0, possibleMoves.length);
+    return possibleMoves[index];
+}
+
 export function getWinner(moves) {
     if (moves.length === 0) return [];
 
