@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { getWinner, getWeekComputerMove } from "./gameLogic.js";
+import { getWinnerMoves, getWeekComputerMove } from "./gameLogic.js";
 import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
 import GameOver from "./components/GameOver.jsx";
@@ -37,7 +37,7 @@ function App() {
     ]);
 
     const activePlayerSymbol = moves.length % 2 === 0 ? SYMBOL_1 : SYMBOL_2;
-    const winningMoves = getWinner(moves);
+    const winningMoves = getWinnerMoves(moves);
     const winnerName =
         winningMoves.length > 0
             ? players[winningMoves[0][0].symbol].name

@@ -25,7 +25,7 @@ export function getWeekComputerMove(moves, symbol_1, symbol_2) {
     return possibleMoves[index];
 }
 
-export function getWinner(moves) {
+export function getWinnerMoves(moves) {
     if (moves.length === 0) return [];
 
     const potentialWinnerSymbol = moves[moves.length - 1].symbol;
