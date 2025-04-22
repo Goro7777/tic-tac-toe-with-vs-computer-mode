@@ -9,7 +9,7 @@ function randomIntegerBetween(min, max) {
     return min + Math.floor((max - min) * Math.random());
 }
 
-export function weekComputerMove(moves, symbol_1, symbol_2) {
+export function getWeekComputerMove(moves, symbol_1, symbol_2) {
     let symbol = moves.length % 2 === 0 ? symbol_1 : symbol_2;
 
     let possibleMoves = [];

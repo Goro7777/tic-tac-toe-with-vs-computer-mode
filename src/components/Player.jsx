@@ -33,7 +33,7 @@ export default function Player({
     }
     if (isEditing && computerTypes) {
         editablePlayerName = (
-            <select ref={ref}>
+            <select ref={ref} defaultValue={name}>
                 {computerTypes.map((type) => (
                     <option key={type} value={type}>
                         {type}
