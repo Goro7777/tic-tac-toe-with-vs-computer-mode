@@ -1,5 +1,9 @@
 import { useState, useRef } from "react";
-import { getWinnerMoves, getWeekComputerMove } from "./gameLogic.js";
+import {
+    getWinnerMoves,
+    getWeekComputerMove,
+    getAverageComputerMoves,
+} from "./gameLogic.js";
 import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
 import GameOver from "./components/GameOver.jsx";
@@ -57,7 +61,7 @@ function App() {
             [activePlayerSymbol]: true,
         }));
         timerRef.current = setTimeout(() => {
-            let nextMove = getWeekComputerMove(moves, SYMBOL_1, SYMBOL_2);
+            let nextMove = getAverageComputerMoves(moves, SYMBOL_1, SYMBOL_2);
             setMoves((prevMoves) => [...prevMoves, nextMove]);
             setComputerPlayerIsThinking((prev) => ({
                 ...prev,

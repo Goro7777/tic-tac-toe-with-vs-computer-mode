@@ -9,9 +9,7 @@ function randomIntegerBetween(min, max) {
     return min + Math.floor((max - min) * Math.random());
 }
 
-export function getWeekComputerMove(moves, symbol_1, symbol_2) {
-    let symbol = moves.length % 2 === 0 ? symbol_1 : symbol_2;
-
+function getPossibleMoves(moves, symbol) {
     let possibleMoves = [];
     for (let row = 0; row < 3; row++) {
         for (let col = 0; col < 3; col++) {
@@ -20,7 +18,46 @@ export function getWeekComputerMove(moves, symbol_1, symbol_2) {
             }
         }
     }
+    return possibleMoves;
+}
 
+export function getWeekComputerMove(moves, symbol_1, symbol_2) {
+    let symbol = moves.length % 2 === 0 ? symbol_1 : symbol_2;
+    let possibleMoves = getPossibleMoves(moves, symbol);
+    let index = randomIntegerBetween(0, possibleMoves.length);
+    return possibleMoves[index];
+}
+
+export function getAverageComputerMoves(moves, symbol_1, symbol_2) {
+    let symbol = moves.length % 2 === 0 ? symbol_1 : symbol_2;
+    let possibleMoves = getPossibleMoves(moves, symbol);
+
+    // if it exists, return a move to win
+    let nextMoves = [...moves];
+    for (let move of possibleMoves) {
+        nextMoves.push(move);
+        if (getWinnerMoves(nextMoves).length > 0) {
+            return move;
+        }
+        nextMoves.pop();
+    }
+
+    // if it exists, return a move to prevent the opponent from winning
+    let opponentSymbol = symbol === symbol_1 ? symbol_2 : symbol_1;
+    let possibleOpponentMoves = possibleMoves.map((move) => ({
+        ...move,
+        symbol: opponentSymbol,
+    }));
+    for (let move of possibleOpponentMoves) {
+        nextMoves.push(move);
+        if (getWinnerMoves(nextMoves).length > 0) {
+            move.symbol = symbol;
+            return move;
+        }
+        nextMoves.pop();
+    }
+
+    // return a random move
     let index = randomIntegerBetween(0, possibleMoves.length);
     return possibleMoves[index];
 }
