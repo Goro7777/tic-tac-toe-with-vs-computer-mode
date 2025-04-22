@@ -26,7 +26,7 @@ function App() {
         { row: 0, col: 1, symbol: "X" },
         { row: 0, col: 2, symbol: "O" },
     ]);
-    const activePlayerSymbol = getActivePlayerSymbol(moves, SYMBOL_1, SYMBOL_2);
+    const activePlayerSymbol = moves.length % 2 === 0 ? SYMBOL_1 : SYMBOL_2;
     const winningMoves = getWinner(moves);
     const winnerName =
         winningMoves.length > 0
@@ -45,11 +45,8 @@ function App() {
 
     function handleSelectEmptySquare(row, col) {
         setMoves((prevMoves) => {
-            let currentPlayerSymbol = getActivePlayerSymbol(
-                prevMoves,
-                SYMBOL_1,
-                SYMBOL_2
-            );
+            let currentPlayerSymbol =
+                prevMoves.length % 2 === 0 ? SYMBOL_1 : SYMBOL_2;
             return [...prevMoves, { row, col, symbol: currentPlayerSymbol }];
         });
     }
@@ -139,11 +136,3 @@ function App() {
 }
 
 export default App;
-
-function getActivePlayerSymbol(moves, symbol_1, symbol_2) {
-    let activePlayerSymbol = symbol_1;
-    if (moves.length > 0 && moves[moves.length - 1].symbol === symbol_1) {
-        activePlayerSymbol = symbol_2;
-    }
-    return activePlayerSymbol;
-}
