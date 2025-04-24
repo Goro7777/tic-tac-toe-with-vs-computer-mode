@@ -3,6 +3,7 @@ import {
     getWinnerMoves,
     getWeekComputerMove,
     getAverageComputerMoves,
+    getStrongComputerMoves,
 } from "./gameLogic.js";
 import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
@@ -61,7 +62,7 @@ function App() {
             [activePlayerSymbol]: true,
         }));
         timerRef.current = setTimeout(() => {
-            let nextMove = getAverageComputerMoves(moves, SYMBOL_1, SYMBOL_2);
+            let nextMove = getStrongComputerMoves(moves, SYMBOL_1, SYMBOL_2);
             setMoves((prevMoves) => [...prevMoves, nextMove]);
             setComputerPlayerIsThinking((prev) => ({
                 ...prev,
