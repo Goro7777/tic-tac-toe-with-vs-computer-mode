@@ -44,17 +44,17 @@ function App() {
 
     const activePlayerSymbol = moves.length % 2 === 0 ? SYMBOL_1 : SYMBOL_2;
     const gameIsLost = checkGameIsLost(moves, SYMBOL_1, SYMBOL_2);
+    const gameIsDrawn = moves.length === 9 && !gameIsLost;
+    const gameIsOver = gameIsDrawn || gameIsLost;
     const winnerName = gameIsLost
         ? players[moves[moves.length - 1].symbol].name
         : null;
-    const gameIsDrawn = moves.length === 9 && winnerName === null;
-    const gameOver = gameIsDrawn || gameIsLost;
 
     const timerRef = useRef();
 
     if (
         players[activePlayerSymbol].isComputer &&
-        !gameOver &&
+        !gameIsOver &&
         !computerPlayerIsThinking[activePlayerSymbol]
     ) {
         setComputerPlayerIsThinking((prev) => ({
@@ -165,7 +165,7 @@ function App() {
                         player
                     </button>
                 </div>
-                {(winnerName || gameIsDrawn) && (
+                {gameIsOver && (
                     <GameOver
                         winnerName={winnerName}
                         onRestart={() => handleResetTo(0)}
