@@ -6,10 +6,10 @@ import GameOver from "./components/GameOver.jsx";
 import Log from "./components/Log.jsx";
 
 import {
-    getWinnerMoves,
+    checkGameIsLost,
     getWeekComputerMove,
-    getAverageComputerMoves,
-    getStrongComputerMoves,
+    getAverageComputerMove,
+    getStrongComputerMove,
 } from "./gameLogic.js";
 
 const SYMBOL_1 = "X";
@@ -27,9 +27,9 @@ const DEFAULT_PLAYER_NAMES = {
 };
 
 const COMPUTERS = {
-    "week computer": getWeekComputerMove,
-    "average computer": getAverageComputerMoves,
-    "strong computer": getStrongComputerMoves,
+    "Week computer": getWeekComputerMove,
+    "Average computer": getAverageComputerMove,
+    "Strong computer": getStrongComputerMove,
 };
 
 function App() {
@@ -43,13 +43,12 @@ function App() {
     const [moves, setMoves] = useState([]);
 
     const activePlayerSymbol = moves.length % 2 === 0 ? SYMBOL_1 : SYMBOL_2;
-    const winningMoves = getWinnerMoves(moves);
-    const winnerName =
-        winningMoves.length > 0
-            ? players[winningMoves[0][0].symbol].name
-            : null;
-    const gameDrawn = moves.length === 9 && winnerName === null;
-    const gameOver = gameDrawn || winningMoves.length > 0;
+    const gameIsLost = checkGameIsLost(moves, SYMBOL_1, SYMBOL_2);
+    const winnerName = gameIsLost
+        ? players[moves[moves.length - 1].symbol].name
+        : null;
+    const gameIsDrawn = moves.length === 9 && winnerName === null;
+    const gameOver = gameIsDrawn || gameIsLost;
 
     const timerRef = useRef();
 
@@ -166,7 +165,7 @@ function App() {
                         player
                     </button>
                 </div>
-                {(winnerName || gameDrawn) && (
+                {(winnerName || gameIsDrawn) && (
                     <GameOver
                         winnerName={winnerName}
                         onRestart={() => handleResetTo(0)}
