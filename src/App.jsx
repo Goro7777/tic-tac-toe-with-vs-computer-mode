@@ -143,7 +143,7 @@ function App() {
                             players[SYMBOL_2].isComputer &&
                             Object.keys(COMPUTERS)
                         }
-                        rtl={true}
+                        reverseOrder={true}
                     />
                 </ol>
                 <div id="player-type-controllers">

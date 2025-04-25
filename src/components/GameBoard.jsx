@@ -10,10 +10,10 @@ export default function GameBoard({ moves, onSelectEmptySquare, isActive }) {
         gameBoard[move.row][move.col] = move.symbol;
     }
 
-    function handleSelectSquare(row, col, symbol) {
+    function handleSelectSquare(row, col, isEmpty) {
         if (!isActive) return;
 
-        if (!symbol) {
+        if (isEmpty) {
             onSelectEmptySquare(row, col);
         }
     }
@@ -30,7 +30,7 @@ export default function GameBoard({ moves, onSelectEmptySquare, isActive }) {
                                         handleSelectSquare(
                                             rowIndex,
                                             colIndex,
-                                            symbol
+                                            !symbol
                                         )
                                     }
                                 >

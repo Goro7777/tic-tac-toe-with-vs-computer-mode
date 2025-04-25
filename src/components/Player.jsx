@@ -1,10 +1,9 @@
-import { useRef } from "react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 export default function Player({
     name,
     symbol,
-    rtl,
+    reverseOrder,
     isActive,
     computerTypes,
     onUpdateName,
@@ -19,9 +18,21 @@ export default function Player({
         setIsEditing((editingState) => !editingState);
     }
 
+    let editButton = (
+        <button onClick={handleEditClick}>{isEditing ? "Save" : "Edit"}</button>
+    );
+
     let editablePlayerName = <span className="player-name">{name}</span>;
-    if (isEditing && !computerTypes) {
-        editablePlayerName = (
+    if (isEditing) {
+        editablePlayerName = computerTypes ? (
+            <select ref={ref} defaultValue={name}>
+                {computerTypes.map((type) => (
+                    <option key={type} value={type}>
+                        {type}
+                    </option>
+                ))}
+            </select>
+        ) : (
             <input
                 ref={ref}
                 type="text"
@@ -31,38 +42,17 @@ export default function Player({
             />
         );
     }
-    if (isEditing && computerTypes) {
-        editablePlayerName = (
-            <select ref={ref} defaultValue={name}>
-                {computerTypes.map((type) => (
-                    <option key={type} value={type}>
-                        {type}
-                    </option>
-                ))}
-            </select>
-        );
-    }
 
-    let editButton = (
-        <button onClick={handleEditClick}>{isEditing ? "Save" : "Edit"}</button>
-    );
     let playerSymbol = <span className="player-symbol">{symbol}</span>;
 
+    let classes = "player" + (reverseOrder ? " reverse-order" : "");
     return (
         <li className={isActive ? "active" : null}>
-            {rtl ? (
-                <span className="player">
-                    {editButton}
-                    {editablePlayerName}
-                    {playerSymbol}
-                </span>
-            ) : (
-                <span className="player">
-                    {playerSymbol}
-                    {editablePlayerName}
-                    {editButton}
-                </span>
-            )}
+            <span className={classes}>
+                {playerSymbol}
+                {editablePlayerName}
+                {editButton}
+            </span>
         </li>
     );
 }
