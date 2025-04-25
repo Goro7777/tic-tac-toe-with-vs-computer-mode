@@ -64,7 +64,6 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* gap: 2rem; */
 }
 
 #players li {
@@ -253,8 +252,7 @@ ol {
 }
 
 #log li button,
-#player-type-controller button {
-    /* float: right; */
+#player-type-controllers button {
     background: #3f3b00;
     border: 1px solid #fcd256;
     color: #fcd256;
@@ -262,13 +260,13 @@ ol {
 }
 
 #log li button,
-#player-type-controller button:last-child {
+#player-type-controllers button:last-child {
     float: right;
 }
 
 #log li button,
 #game-over button,
-#player-type-controller button:hover {
+#player-type-controllers button:hover {
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s, color 0.2s;
@@ -277,7 +275,7 @@ ol {
 
 #game-over button:hover,
 #log li button:hover,
-#player-type-controller button:hover {
+#player-type-controllers button:hover {
     background: #fcd256;
     color: #3f3b00;
     transform: scale(1.1);

@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 
 import Player from "./components/Player";
+import PlayerTypeController from "./components/PlayerTypeController.jsx";
 import GameBoard from "./components/GameBoard";
 import GameOver from "./components/GameOver.jsx";
 import Log from "./components/Log.jsx";
@@ -145,25 +146,15 @@ function App() {
                         rtl={true}
                     />
                 </ol>
-                <div id="player-type-controller">
-                    <button onClick={() => handleSwitchPlayerType(SYMBOL_1)}>
-                        Switch to{" "}
-                        <strong>
-                            {players[SYMBOL_1].isComputer
-                                ? "human"
-                                : "computer"}
-                        </strong>{" "}
-                        player
-                    </button>
-                    <button onClick={() => handleSwitchPlayerType(SYMBOL_2)}>
-                        Switch to{" "}
-                        <strong>
-                            {players[SYMBOL_2].isComputer
-                                ? "human"
-                                : "computer"}
-                        </strong>{" "}
-                        player
-                    </button>
+                <div id="player-type-controllers">
+                    <PlayerTypeController
+                        onSwitchType={() => handleSwitchPlayerType(SYMBOL_1)}
+                        isComputer={players[SYMBOL_1].isComputer}
+                    />
+                    <PlayerTypeController
+                        onSwitchType={() => handleSwitchPlayerType(SYMBOL_2)}
+                        isComputer={players[SYMBOL_2].isComputer}
+                    />
                 </div>
                 {gameIsOver && (
                     <GameOver
