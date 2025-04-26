@@ -29,7 +29,7 @@ const DEFAULT_PLAYER_NAMES = {
 
 const COMPUTERS = {
     "Week computer": getWeekComputerMove,
-    "Average computer": getAverageComputerMove,
+    "Medium computer": getAverageComputerMove,
     "Strong computer": getStrongComputerMove,
 };
 
@@ -165,7 +165,8 @@ function App() {
                 <GameBoard
                     moves={moves}
                     onSelectEmptySquare={handleSelectEmptySquare}
-                    isActive={!players[activePlayerSymbol].isComputer}
+                    computerIsPlaying={players[activePlayerSymbol].isComputer}
+                    activePlayerSymbol={activePlayerSymbol}
                 />
             </div>
             <Log moves={moves} onResetTo={handleResetTo} />

@@ -202,6 +202,10 @@ ol {
     padding: 1rem;
 }
 
+#game-board button.empty {
+    color: #3f3b0088;
+}
+
 #game-over {
     position: absolute;
     top: 0;
