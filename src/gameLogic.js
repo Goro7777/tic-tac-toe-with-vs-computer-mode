@@ -1,5 +1,7 @@
 const LOOSING = "L";
 const WINNING = "W";
+const SYMBOL_1 = "A";
+const SYMBOL_2 = "B";
 const NO_SYMBOL = "-";
 
 const WINNING_INDICES_SETS = [
@@ -12,21 +14,21 @@ const WINNING_INDICES_SETS = [
     [0, 4, 8],
     [2, 4, 6],
 ];
+const POSITIONS = buildPositionsTree();
 
-export function checkGameIsLost(moves, symbol1, symbol2) {
+export function checkGameIsLost(moves) {
+    if (moves.length <= 3) return false;
     let position = getPosition(moves);
-
-    return checkPositionIsLost(position, symbol1, symbol2);
+    return checkPositionIsLost(position);
 }
 
 export function getWeekComputerMove(moves, symbol1, symbol2) {
     let symbol = moves.length % 2 === 0 ? symbol1 : symbol2;
     let possibleMoves = getPossibleMoves(moves, symbol);
-    let index = randomIntegerBetween(0, possibleMoves.length);
-    return possibleMoves[index];
+    return getRandomElement(possibleMoves);
 }
 
-export function getAverageComputerMove(moves, symbol1, symbol2) {
+export function getMediumComputerMove(moves, symbol1, symbol2) {
     let symbol = moves.length % 2 === 0 ? symbol1 : symbol2;
     let possibleMoves = getPossibleMoves(moves, symbol);
 
@@ -34,7 +36,7 @@ export function getAverageComputerMove(moves, symbol1, symbol2) {
     let nextMoves = [...moves];
     for (let move of possibleMoves) {
         nextMoves.push(move);
-        if (checkGameIsLost(nextMoves, symbol1, symbol2)) {
+        if (checkGameIsLost(nextMoves)) {
             return move;
         }
         nextMoves.pop();
@@ -42,53 +44,57 @@ export function getAverageComputerMove(moves, symbol1, symbol2) {
 
     // if it exists, return a move to prevent the opponent from winning the game
     let opponentSymbol = symbol === symbol1 ? symbol2 : symbol1;
+    let nextOpponentMoves = [...moves];
     let possibleOpponentMoves = possibleMoves.map((move) => ({
         ...move,
         symbol: opponentSymbol,
     }));
     for (let move of possibleOpponentMoves) {
-        nextMoves.push(move);
-        if (checkGameIsLost(nextMoves, symbol1, symbol2)) {
+        nextOpponentMoves.push(move);
+        if (checkGameIsLost(nextOpponentMoves)) {
             move.symbol = symbol;
             return move;
         }
-        nextMoves.pop();
+        nextOpponentMoves.pop();
     }
 
     // return a random move
-    let index = randomIntegerBetween(0, possibleMoves.length);
-    return possibleMoves[index];
+    return getRandomElement(possibleMoves);
 }
 
-let map = null;
-
 export function getStrongComputerMove(moves, symbol1, symbol2) {
-    if (!map) {
-        map = buildPositionsTree(symbol1, symbol2);
-    }
-
     const position = getPosition(moves);
 
     let bestNextPositions;
-    if (map[position].status === WINNING) {
+    if (POSITIONS[position].status === WINNING) {
         // if my position is winning, choose among loosing child positions
-        bestNextPositions = map[position].childPositions.filter(
-            (childPosition) => map[childPosition].status === LOOSING
+        bestNextPositions = POSITIONS[position].childPositions.filter(
+            (childPosition) => POSITIONS[childPosition].status === LOOSING
         );
     } else {
-        // else choose emong non-winning child positions
-        bestNextPositions = map[position].childPositions.filter(
-            (childPosition) => map[childPosition].status !== WINNING
+        // else choose among non-winning child positions
+        bestNextPositions = POSITIONS[position].childPositions.filter(
+            (childPosition) => POSITIONS[childPosition].status !== WINNING
         );
     }
 
     let index = randomIntegerBetween(0, bestNextPositions.length);
     let move = getNextMove(moves, bestNextPositions[index]);
+    move.symbol = move.symbol === SYMBOL_1 ? symbol1 : symbol2;
     return move;
 }
 
-function randomIntegerBetween(min, max) {
-    return min + Math.floor((max - min) * Math.random());
+function checkPositionIsLost(position) {
+    for (let set of WINNING_INDICES_SETS) {
+        let [index1, index2, index3] = set;
+        if (
+            position[index1] === position[index2] &&
+            position[index2] === position[index3] &&
+            position[index1] !== NO_SYMBOL
+        )
+            return true;
+    }
+    return false;
 }
 
 function getPossibleMoves(moves, symbol) {
@@ -103,26 +109,16 @@ function getPossibleMoves(moves, symbol) {
     return possibleMoves;
 }
 
-function checkPositionIsLost(position, symbol1, symbol2) {
-    for (let set of WINNING_INDICES_SETS) {
-        let [index1, index2, index3] = set;
-        if (
-            position[index1] === position[index2] &&
-            position[index2] === position[index3] &&
-            (position[index1] === symbol1 || position[index1] === symbol2)
-        )
-            return true;
-    }
-    return false;
-}
-
-function buildPositionsTree(symbol1, symbol2) {
+function buildPositionsTree() {
     let map = Object.create(null);
+    let gameStartPosition = NO_SYMBOL.repeat(9);
+    helper(gameStartPosition);
+    return map;
 
     function helper(position) {
         if (map[position]) return;
 
-        if (checkPositionIsLost(position, symbol1, symbol2)) {
+        if (checkPositionIsLost(position)) {
             map[position] = { status: LOOSING };
             return;
         }
@@ -130,14 +126,14 @@ function buildPositionsTree(symbol1, symbol2) {
         let symbol1Count = 0;
         let symbol2Count = 0;
         for (let ch of position) {
-            if (ch === symbol1) symbol1Count++;
-            else if (ch === symbol2) symbol2Count++;
+            if (ch === SYMBOL_1) symbol1Count++;
+            else if (ch === SYMBOL_2) symbol2Count++;
         }
-        const nextSymbol = symbol1Count > symbol2Count ? symbol2 : symbol1;
+        const nextSymbol = symbol1Count > symbol2Count ? SYMBOL_2 : SYMBOL_1;
 
         let childPositions = [];
         for (let i = 0; i < 9; i++) {
-            if (position[i] !== symbol1 && position[i] !== symbol2) {
+            if (position[i] !== SYMBOL_1 && position[i] !== SYMBOL_2) {
                 let nextPosition =
                     position.substring(0, i) +
                     nextSymbol +
@@ -165,15 +161,15 @@ function buildPositionsTree(symbol1, symbol2) {
             map[position].status = LOOSING;
         }
     }
-
-    helper("---------");
-    return map;
 }
 
 function getPosition(moves) {
     let positionArray = new Array(9).fill(NO_SYMBOL);
     for (let move of moves) {
-        positionArray[move.row * 3 + move.col] = move.symbol;
+        const isPlayer1 = move.symbol === moves[0].symbol;
+        positionArray[move.row * 3 + move.col] = isPlayer1
+            ? SYMBOL_1
+            : SYMBOL_2;
     }
     return positionArray.join("");
 }
@@ -190,4 +186,12 @@ function getNextMove(moves, nextPosition) {
             return { row, col, symbol };
         }
     }
+}
+
+function getRandomElement(array) {
+    return array[randomIntegerBetween(0, array.length)];
+}
+
+function randomIntegerBetween(min, max) {
+    return min + Math.floor((max - min) * Math.random());
 }

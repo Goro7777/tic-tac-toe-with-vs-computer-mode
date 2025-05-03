@@ -9,7 +9,7 @@ import Log from "./components/Log.jsx";
 import {
     checkGameIsLost,
     getWeekComputerMove,
-    getAverageComputerMove,
+    getMediumComputerMove,
     getStrongComputerMove,
 } from "./gameLogic.js";
 
@@ -29,7 +29,7 @@ const DEFAULT_PLAYER_NAMES = {
 
 const COMPUTERS = {
     "Week computer": getWeekComputerMove,
-    "Medium computer": getAverageComputerMove,
+    "Medium computer": getMediumComputerMove,
     "Strong computer": getStrongComputerMove,
 };
 
@@ -44,7 +44,7 @@ function App() {
     const [moves, setMoves] = useState([]);
 
     const activePlayerSymbol = moves.length % 2 === 0 ? SYMBOL_1 : SYMBOL_2;
-    const gameIsLost = checkGameIsLost(moves, SYMBOL_1, SYMBOL_2);
+    const gameIsLost = checkGameIsLost(moves);
     const gameIsDrawn = moves.length === 9 && !gameIsLost;
     const gameIsOver = gameIsDrawn || gameIsLost;
     const winnerName = gameIsLost
