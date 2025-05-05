@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import Player from "./components/Player";
 import PlayerTypeController from "./components/PlayerTypeController.jsx";
@@ -7,6 +7,7 @@ import GameOver from "./components/GameOver.jsx";
 import Log from "./components/Log.jsx";
 
 import { checkGameIsLost } from "./gameLogic.js";
+import { useMakeMove } from "./hooks/useMakeMove.js";
 
 const SYMBOL_1 = "X";
 const SYMBOL_2 = "O";
@@ -34,33 +35,16 @@ function App() {
         ? players[moves[moves.length - 1].symbol].name
         : null;
 
-    useEffect(() => {
-        if (!players[activePlayerSymbol].isComputer || gameIsOver) return;
-
-        let difficulty = COMPUTERS.findIndex(
-            (name) => name === players[activePlayerSymbol].name
-        );
-        let fetchBody = {
-            moves,
-            difficulty,
-            symbol1: SYMBOL_1,
-            symbol2: SYMBOL_2,
-        };
-
-        fetch("http://localhost:3000/getMove", {
-            method: "POST",
-            body: JSON.stringify(fetchBody),
-        })
-            .then((response) => {
-                return response.json();
-            })
-            .then((nextMove) => {
-                setMoves((prevMoves) => [...prevMoves, nextMove]);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, [players, gameIsOver, moves]);
+    let enabled = players[activePlayerSymbol].isComputer && !gameIsOver;
+    useMakeMove(
+        enabled,
+        moves,
+        setMoves,
+        players,
+        COMPUTERS,
+        SYMBOL_1,
+        SYMBOL_2
+    );
 
     function handleUpdateName(symbol, newName) {
         if (newName) {
