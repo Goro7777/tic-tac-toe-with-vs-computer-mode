@@ -2,7 +2,14 @@ import { createServer } from "http";
 import { getMove } from "./controllers/moveController.js";
 
 const server = createServer((req, res) => {
-    if (req.url === "/getMove" && req.method === "POST") {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
+    res.setHeader("Access-Control-Allow-Headers", "*");
+
+    if (req.method === "OPTIONS") {
+        res.writeHead(204);
+        return res.end();
+    } else if (req.url === "/getMove" && req.method === "POST") {
         getMove(req, res);
     } else {
         res.writeHead(404, { "Content-Type": "application/json" });
