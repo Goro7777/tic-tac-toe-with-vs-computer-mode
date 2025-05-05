@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 
 import Player from "./components/Player";
 import PlayerTypeController from "./components/PlayerTypeController.jsx";
@@ -16,12 +16,6 @@ import {
 const SYMBOL_1 = "X";
 const SYMBOL_2 = "O";
 
-const COMPUTER_MOVE_DELAY = 1000;
-const INITIAL_COMPUTER_THINKING_STATE = {
-    [SYMBOL_1]: false,
-    [SYMBOL_2]: false,
-};
-
 const DEFAULT_PLAYER_NAMES = {
     [SYMBOL_1]: "Player 1",
     [SYMBOL_2]: "Player 2",
@@ -33,45 +27,34 @@ const COMPUTERS = {
     "Strong computer": getStrongComputerMove,
 };
 
+const COMPUTER_MOVE_DELAY = 1000;
+
 function App() {
     const [players, setPlayers] = useState({
         [SYMBOL_1]: { name: DEFAULT_PLAYER_NAMES[SYMBOL_1], isComputer: false },
         [SYMBOL_2]: { name: DEFAULT_PLAYER_NAMES[SYMBOL_2], isComputer: false },
     });
-    const [computerPlayerIsThinking, setComputerPlayerIsThinking] = useState(
-        INITIAL_COMPUTER_THINKING_STATE
-    );
     const [moves, setMoves] = useState([]);
 
     const activePlayerSymbol = moves.length % 2 === 0 ? SYMBOL_1 : SYMBOL_2;
     const gameIsLost = checkGameIsLost(moves);
-    const gameIsDrawn = moves.length === 9 && !gameIsLost;
-    const gameIsOver = gameIsDrawn || gameIsLost;
+    const gameIsOver = gameIsLost || moves.length === 9;
     const winnerName = gameIsLost
         ? players[moves[moves.length - 1].symbol].name
         : null;
 
-    const timerRef = useRef();
+    useEffect(() => {
+        if (!players[activePlayerSymbol].isComputer || gameIsOver) return;
 
-    if (
-        players[activePlayerSymbol].isComputer &&
-        !gameIsOver &&
-        !computerPlayerIsThinking[activePlayerSymbol]
-    ) {
-        setComputerPlayerIsThinking((prev) => ({
-            ...prev,
-            [activePlayerSymbol]: true,
-        }));
-        timerRef.current = setTimeout(() => {
-            let name = players[activePlayerSymbol].name;
-            let nextMove = COMPUTERS[name](moves, SYMBOL_1, SYMBOL_2);
+        let name = players[activePlayerSymbol].name;
+        let nextMove = COMPUTERS[name](moves, SYMBOL_1, SYMBOL_2);
+
+        let id = setTimeout(() => {
             setMoves((prevMoves) => [...prevMoves, nextMove]);
-            setComputerPlayerIsThinking((prev) => ({
-                ...prev,
-                [activePlayerSymbol]: false,
-            }));
         }, COMPUTER_MOVE_DELAY);
-    }
+
+        return () => clearTimeout(id);
+    }, [players, gameIsOver, moves]);
 
     function handleUpdateName(symbol, newName) {
         if (newName) {
@@ -93,8 +76,6 @@ function App() {
 
     function handleResetTo(move) {
         setMoves((prevMoves) => prevMoves.slice(0, move));
-        setComputerPlayerIsThinking(INITIAL_COMPUTER_THINKING_STATE);
-        clearTimeout(timerRef.current);
     }
 
     function handleSwitchPlayerType(symbol) {
