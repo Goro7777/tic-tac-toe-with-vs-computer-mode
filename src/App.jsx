@@ -6,12 +6,7 @@ import GameBoard from "./components/GameBoard";
 import GameOver from "./components/GameOver.jsx";
 import Log from "./components/Log.jsx";
 
-import {
-    checkGameIsLost,
-    getWeekComputerMove,
-    getMediumComputerMove,
-    getStrongComputerMove,
-} from "./gameLogic.js";
+import { checkGameIsLost } from "./gameLogic.js";
 
 const SYMBOL_1 = "X";
 const SYMBOL_2 = "O";
@@ -21,13 +16,9 @@ const DEFAULT_PLAYER_NAMES = {
     [SYMBOL_2]: "Player 2",
 };
 
-const COMPUTERS = {
-    "Week computer": getWeekComputerMove,
-    "Medium computer": getMediumComputerMove,
-    "Strong computer": getStrongComputerMove,
-};
+const COMPUTERS = ["Week computer", "Medium computer", "Strong computer"];
 
-const COMPUTER_MOVE_DELAY = 1000;
+// const COMPUTER_MOVE_DELAY = 1000;
 
 function App() {
     const [players, setPlayers] = useState({
@@ -46,14 +37,29 @@ function App() {
     useEffect(() => {
         if (!players[activePlayerSymbol].isComputer || gameIsOver) return;
 
-        let name = players[activePlayerSymbol].name;
-        let nextMove = COMPUTERS[name](moves, SYMBOL_1, SYMBOL_2);
+        let difficulty = COMPUTERS.findIndex(
+            (name) => name === players[activePlayerSymbol].name
+        );
+        let fetchBody = {
+            moves,
+            difficulty,
+            symbol1: SYMBOL_1,
+            symbol2: SYMBOL_2,
+        };
 
-        let id = setTimeout(() => {
-            setMoves((prevMoves) => [...prevMoves, nextMove]);
-        }, COMPUTER_MOVE_DELAY);
-
-        return () => clearTimeout(id);
+        fetch("http://localhost:3000/getMove", {
+            method: "POST",
+            body: JSON.stringify(fetchBody),
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((nextMove) => {
+                setMoves((prevMoves) => [...prevMoves, nextMove]);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }, [players, gameIsOver, moves]);
 
     function handleUpdateName(symbol, newName) {
@@ -91,7 +97,7 @@ function App() {
             setPlayers((players) => ({
                 ...players,
                 [symbol]: {
-                    name: Object.keys(COMPUTERS)[0],
+                    name: COMPUTERS[0],
                     isComputer: true,
                 },
             }));
@@ -110,8 +116,7 @@ function App() {
                         symbol={SYMBOL_1}
                         isActive={activePlayerSymbol === SYMBOL_1}
                         computerTypes={
-                            players[SYMBOL_1].isComputer &&
-                            Object.keys(COMPUTERS)
+                            players[SYMBOL_1].isComputer && COMPUTERS
                         }
                     />
                     <Player
@@ -121,8 +126,7 @@ function App() {
                         symbol={SYMBOL_2}
                         isActive={activePlayerSymbol === SYMBOL_2}
                         computerTypes={
-                            players[SYMBOL_2].isComputer &&
-                            Object.keys(COMPUTERS)
+                            players[SYMBOL_2].isComputer && COMPUTERS
                         }
                         reverseOrder={true}
                     />
