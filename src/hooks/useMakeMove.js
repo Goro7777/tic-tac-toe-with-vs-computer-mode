@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function useMakeMove(
     enabled,
@@ -7,9 +7,13 @@ export function useMakeMove(
     players,
     computers,
     symbol1,
-    symbol2
+    symbol2,
+    delay
 ) {
+    const [error, setError] = useState(null);
+
     useEffect(() => {
+        setError(null);
         if (!enabled) return;
 
         const activePlayerSymbol = moves.length % 2 === 0 ? symbol1 : symbol2;
@@ -25,16 +29,34 @@ export function useMakeMove(
 
         fetch("http://localhost:3000/getMove", {
             method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
             body: JSON.stringify(fetchBody),
         })
             .then((response) => {
-                return response.json();
+                if (response.status !== 200) {
+                    return response.json().then((error) => {
+                        throw error;
+                    });
+                } else {
+                    return response.json();
+                }
             })
             .then((nextMove) => {
-                setMoves((prevMoves) => [...prevMoves, nextMove]);
+                return new Promise(() => {
+                    setTimeout(
+                        () => setMoves((prevMoves) => [...prevMoves, nextMove]),
+                        delay
+                    );
+                });
             })
             .catch((error) => {
-                console.log(error);
+                setError({
+                    message: error.message || "Computer cannot make a move",
+                });
             });
     }, [enabled, moves, players]);
+
+    return error;
 }

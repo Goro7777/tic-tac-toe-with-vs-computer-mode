@@ -19,7 +19,7 @@ const DEFAULT_PLAYER_NAMES = {
 
 const COMPUTERS = ["Week computer", "Medium computer", "Strong computer"];
 
-// const COMPUTER_MOVE_DELAY = 1000;
+const COMPUTER_MOVE_DELAY = 1000;
 
 function App() {
     const [players, setPlayers] = useState({
@@ -36,15 +36,20 @@ function App() {
         : null;
 
     let enabled = players[activePlayerSymbol].isComputer && !gameIsOver;
-    useMakeMove(
+    const computerMoveError = useMakeMove(
         enabled,
         moves,
         setMoves,
         players,
         COMPUTERS,
         SYMBOL_1,
-        SYMBOL_2
+        SYMBOL_2,
+        COMPUTER_MOVE_DELAY
     );
+
+    if (computerMoveError) {
+        console.log("App.js: " + computerMoveError.message);
+    }
 
     function handleUpdateName(symbol, newName) {
         if (newName) {
