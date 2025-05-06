@@ -7,6 +7,7 @@ export default function Player({
     isActive,
     computerTypes,
     onUpdateName,
+    errorMessage,
 }) {
     const [isEditing, setIsEditing] = useState(false);
     const ref = useRef();
@@ -48,6 +49,9 @@ export default function Player({
     let classes = "player" + (reverseOrder ? " reverse-order" : "");
     return (
         <li className={isActive ? "active" : null}>
+            {errorMessage && (
+                <span className="player-error">{errorMessage}</span>
+            )}
             <span className={classes}>
                 {playerSymbol}
                 {editablePlayerName}

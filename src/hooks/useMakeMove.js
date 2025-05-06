@@ -52,9 +52,14 @@ export function useMakeMove(
                 });
             })
             .catch((error) => {
-                setError({
-                    message: error.message || "Computer cannot make a move",
-                });
+                setTimeout(
+                    () =>
+                        setError({
+                            message:
+                                error.message || "Computer cannot make a move",
+                        }),
+                    delay
+                );
             });
     }, [enabled, moves, players]);
 

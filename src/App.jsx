@@ -47,9 +47,13 @@ function App() {
         COMPUTER_MOVE_DELAY
     );
 
-    if (computerMoveError) {
-        console.log("App.js: " + computerMoveError.message);
-    }
+    let computerMoveErrorMessage1, computerMoveErrorMessage2;
+    if (computerMoveError && activePlayerSymbol === SYMBOL_1)
+        computerMoveErrorMessage1 =
+            "Computer cannot make a move. Please switch to a human player.";
+    else if (computerMoveError && activePlayerSymbol === SYMBOL_2)
+        computerMoveErrorMessage2 =
+            "Computer cannot make a move. Please switch to a human player.";
 
     function handleUpdateName(symbol, newName) {
         if (newName) {
@@ -107,6 +111,7 @@ function App() {
                         computerTypes={
                             players[SYMBOL_1].isComputer && COMPUTERS
                         }
+                        errorMessage={computerMoveErrorMessage1}
                     />
                     <Player
                         key={players[SYMBOL_2].name + "1"}
@@ -117,6 +122,7 @@ function App() {
                         computerTypes={
                             players[SYMBOL_2].isComputer && COMPUTERS
                         }
+                        errorMessage={computerMoveErrorMessage2}
                         reverseOrder={true}
                     />
                 </ol>
@@ -124,10 +130,12 @@ function App() {
                     <PlayerTypeController
                         onSwitchType={() => handleSwitchPlayerType(SYMBOL_1)}
                         isComputer={players[SYMBOL_1].isComputer}
+                        highlight={computerMoveErrorMessage1}
                     />
                     <PlayerTypeController
                         onSwitchType={() => handleSwitchPlayerType(SYMBOL_2)}
                         isComputer={players[SYMBOL_2].isComputer}
+                        highlight={computerMoveErrorMessage2}
                     />
                 </div>
                 {gameIsOver && (

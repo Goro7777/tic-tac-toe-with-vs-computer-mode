@@ -114,6 +114,19 @@ h1 {
     flex-direction: row-reverse;
 }
 
+.player-error {
+    position: absolute;
+    top: -0.5rem;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-align: center;
+    width: 14rem;
+    padding: 0.1rem 0.3rem;
+    border-radius: 4px;
+    background-color: rgb(244, 235, 235);
+    color: rgb(239, 25, 25);
+}
+
 .player-name {
     display: inline-block;
     width: 12rem;
@@ -271,6 +284,11 @@ ol {
     border: 1px solid #fcd256;
     color: #fcd256;
     padding: 0.3rem 0.5rem;
+}
+
+#player-type-controllers button.highlight {
+    background-color: rgb(244, 235, 235);
+    color: rgb(239, 25, 25);
 }
 
 #log li button,
